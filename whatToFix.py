@@ -1,5 +1,17 @@
 import subprocess
 import re
+import csv
+
+def generateCSV(testCaseDict):
+    with open("temp.csv", 'w') as file:
+        writer = csv.writer(file)
+        writer.writerow(["testSuite", "testCase", "reason", "status"])
+        for testSuite in testCaseDict.keys():
+            for testCase in testCaseDict[testSuite].keys():
+                if len(testCaseDict[testSuite][testCase]) == 1:
+                    writer.writerow([testSuite, testCase, " ", testCaseDict[testSuite][testCase][0]])
+                else:
+                    writer.writerow([testSuite, testCase, testCaseDict[testSuite][testCase][0], testCaseDict[testSuite][testCase][1]])
 
 def generateDictsForFile(file,testCaseDict):
     file = open(file,"r")
@@ -21,7 +33,7 @@ def generateDictsForFile(file,testCaseDict):
             failingtestCase = re.search("^    t =.*Assertion Failure:.*:[0-9]+: (?P<reason>.*)",line)
             if(failingtestCase):
                 reason = failingtestCase.group("reason").rstrip()
-                testCaseDict[testSuite][testCase].append(reason)
+                testCaseDict[testSuite][testCase] = [reason,]
             else:
                 endingTestCase = re.search("^Test Case.*]' (?P<result>\w+).*",line)
                 if(endingTestCase):
@@ -34,6 +46,7 @@ def createCSVData(validatedLogFiles):
     testCaseDict = {}
     for file in validatedLogFiles:
         testCaseDict = generateDictsForFile(file,testCaseDict)
+    generateCSV(testCaseDict)
 
 def validateLogFiles(listOfLogFiles):
     testNames = ['HelpshiftDemoiOSUIConvTests','HelpshiftDemoiOSUIFormTests']
