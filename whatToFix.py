@@ -4,6 +4,20 @@ import csv
 
 testNames = ['HelpshiftDemoiOSUIConvTests','HelpshiftDemoiOSUIFormTests']
 
+def getStartingHTMLString():
+    startingHTMLString = "<!DOCTYPE html><html lang='en' ><head><meta charset='UTF-8'><title>WHAT-TO-FIX</title><link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css'><link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Titillium+Web:300,700,300italic'><link rel='stylesheet' href='./style.css'><script src='https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js'></script></head><body>"
+    return startingHTMLString
+
+def getEndingHTMLString():
+    endingHTMLString = "</body></html>"
+    return endingHTMLString
+
+def createHTMLFile():
+    htmlString = getStartingHTMLString()
+    htmlString += getEndingHTMLString()
+    with open("whatToFix.html", "w") as text_file:
+        text_file.write(htmlString)
+
 def generateCSV(testCaseDict,testName):
     csvFileName = testName+".csv"
     with open(csvFileName, 'w') as file:
@@ -12,7 +26,7 @@ def generateCSV(testCaseDict,testName):
         for testSuite in testCaseDict.keys():
             for testCase in testCaseDict[testSuite].keys():
                 if len(testCaseDict[testSuite][testCase]) == 1:
-                    writer.writerow([testSuite, testCase, " ", testCaseDict[testSuite][testCase][0]])
+                    writer.writerow([testSuite, testCase, "", testCaseDict[testSuite][testCase][0]])
                 else:
                     writer.writerow([testSuite, testCase, testCaseDict[testSuite][testCase][0], testCaseDict[testSuite][testCase][1]])
 
@@ -84,6 +98,7 @@ def main():
         print("\nERROR: No log file found !\n")
         exit(0)
     createCSVData(tupleForValidLogFiles[0])
+    createHTMLFile()
 
 if __name__ == "__main__":
     main()
