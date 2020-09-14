@@ -61,7 +61,7 @@ def generateCSV(testCaseDict,testName):
             for testCase in testCaseDict[testSuite].keys():
                 if len(testCaseDict[testSuite][testCase]) == 1:
                     writer.writerow([testSuite, testCase, "", testCaseDict[testSuite][testCase][0]])
-                else:
+                elif len(testCaseDict[testSuite][testCase]) == 2:
                     writer.writerow([testSuite, testCase, testCaseDict[testSuite][testCase][0], testCaseDict[testSuite][testCase][1]])
 
 def generateDictsForFile(file,testCaseDict):
