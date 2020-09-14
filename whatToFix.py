@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import subprocess
 import re
 import csv
@@ -16,6 +18,7 @@ def getHTMLStringFromCSV(csvFile):
     failureReasons = df.groupby('reason').groups.keys()
     totalTestCases = df['testCase'].nunique()
     htmlString = ""
+    csvFile = csvFile[:len(csvFile)-4]
     if len(failureReasons):
         dictToCount = {}
         for reason in failureReasons:
@@ -26,14 +29,15 @@ def getHTMLStringFromCSV(csvFile):
         for reason in od.keys():
             htmlString += "<li><input type='checkbox' checked><i></i><h3>"
             htmlString += reason
-            htmlString += "<br>Total tests failed : "
+            htmlString += "<br>❄️ Total tests failed : "
             htmlString += str(od[reason])
-            htmlString += "<br>Affecting automation stability by : "
+            htmlString += "<br>❄️ Affecting automation stability by : "
             percent = round(od[reason]*100.0/totalTestCases,3)
             htmlString += str(percent) + " %"
             htmlString += "</h3><p>"
             testCases = df[df['reason'] == reason]['testCase'].values.tolist()
             for testCase in testCases:
+                htmlString += "🔺  "
                 htmlString += testCase
                 htmlString += "<br>"
             htmlString += "</p></li>"
@@ -48,7 +52,7 @@ def getMiddleHTMLString():
     return middleHTMLString
 
 def getStartingHTMLString():
-    startingHTMLString = "<!DOCTYPE html><html lang='en' ><head><meta charset='UTF-8'><title>WHAT-TO-FIX</title><link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css'><link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Titillium+Web:300,700,300italic'><link rel='stylesheet' href='./style.css'><script src='https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js'></script></head><body><h1>WHAT-TO-FIX</h1>"
+    startingHTMLString = "<!DOCTYPE html><html lang='en' ><head><meta charset='UTF-8'><title>WHAT-TO-FIX</title><link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css'><link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Titillium+Web:300,700,300italic'><link rel='stylesheet' href='./style.css'><script src='https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js'></script></head><body><h1>WHAT-TO-FIX 🛠</h1>"
     return startingHTMLString
 
 def createHTMLFile():
