@@ -15,30 +15,30 @@ def getHTMLStringFromCSV(csvFile):
     df = pd.read_csv(csvFile)
     failureReasons = df.groupby('reason').groups.keys()
     totalTestCases = df['testCase'].nunique()
-    htmlstring = ""
+    htmlString = ""
     if len(failureReasons):
         dictToCount = {}
         for reason in failureReasons:
             dictToCount[reason] = df[df['reason'] == reason]['testCase'].nunique()
         od = collections.OrderedDict(sorted(dictToCount.items(), key=lambda x: x[1], reverse=True))
-        htmlstring = "<br><h2>"+csvFile+"</h2><br>"
-        htmlstring += "<ul>"
+        htmlString = "<br><h2>"+csvFile+"</h2><br>"
+        htmlString += "<ul>"
         for reason in od.keys():
-            htmlstring += "<li><input type='checkbox' checked><i></i><h3>"
-            htmlstring += reason
-            htmlstring += "<br>Total tests failed : "
-            htmlstring += str(od[reason])
-            htmlstring += "<br>Affecting automation stability by : "
+            htmlString += "<li><input type='checkbox' checked><i></i><h3>"
+            htmlString += reason
+            htmlString += "<br>Total tests failed : "
+            htmlString += str(od[reason])
+            htmlString += "<br>Affecting automation stability by : "
             percent = round(od[reason]*100.0/totalTestCases,3)
-            htmlstring += str(percent) + " %"
-            htmlstring += "</h3><p>"
+            htmlString += str(percent) + " %"
+            htmlString += "</h3><p>"
             testCases = df[df['reason'] == reason]['testCase'].values.tolist()
             for testCase in testCases:
-                htmlstring += testCase
-                htmlstring += "<br>"
-            htmlstring += "</p></li>"
-        htmlstring += "</ul>"
-    return htmlstring
+                htmlString += testCase
+                htmlString += "<br>"
+            htmlString += "</p></li>"
+        htmlString += "</ul>"
+    return htmlString
 
 def getMiddleHTMLString():
     csvFiles = [f for f in os.listdir(os.getcwd()) if f.endswith('.csv')]
