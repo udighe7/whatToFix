@@ -2,7 +2,7 @@
   transition: all 0.25s ease-in-out;
 }
 
-.flipIn, h1, ul li {
+.flipIn, h1,h2, ul li {
   animation: flipdown 0.5s ease both;
 }
 
@@ -49,17 +49,30 @@ body {
 
 h1, h2 {
   color: #ff6873;
+  text-align: center;
 }
 
 h1 {
-  text-transform: uppercase;
   font-size: 26px;
   line-height: 42px;
   letter-spacing: 3px;
   font-weight: 100;
+  text-align: center;
 }
 
 h2 {
+  font-size: 20px;
+  line-height: 34px;
+  font-weight: 300;
+  letter-spacing: 1px;
+  display: block;
+  background-color: #000;
+  margin: 0;
+  cursor: pointer;
+}
+
+h3 {
+  color: #ff6873;
   font-size: 16px;
   line-height: 34px;
   font-weight: 300;

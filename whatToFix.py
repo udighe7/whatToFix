@@ -14,18 +14,24 @@ def getEndingHTMLString():
 def getHTMLStringFromCSV(csvFile):
     df = pd.read_csv(csvFile)
     failureReasons = df.groupby('reason').groups.keys()
+    totalTestCases = df['testCase'].nunique()
     htmlstring = ""
     if len(failureReasons):
         dictToCount = {}
         for reason in failureReasons:
             dictToCount[reason] = df[df['reason'] == reason]['testCase'].nunique()
         od = collections.OrderedDict(sorted(dictToCount.items(), key=lambda x: x[1], reverse=True))
-        htmlstring = "<br><h2 text-transform: uppercase>"+csvFile+"</h2>"
+        htmlstring = "<br><h2>"+csvFile+"</h2><br>"
         htmlstring += "<ul>"
         for reason in od.keys():
-            htmlstring += "<li><input type='checkbox' checked><i></i><h2>"
+            htmlstring += "<li><input type='checkbox' checked><i></i><h3>"
             htmlstring += reason
-            htmlstring += "</h2><p>"
+            htmlstring += "<br>Total tests failed : "
+            htmlstring += str(od[reason])
+            htmlstring += "<br>Affecting automation stability by : "
+            percent = round(od[reason]*100.0/totalTestCases,3)
+            htmlstring += str(percent) + " %"
+            htmlstring += "</h3><p>"
             testCases = df[df['reason'] == reason]['testCase'].values.tolist()
             for testCase in testCases:
                 htmlstring += testCase
@@ -42,7 +48,7 @@ def getMiddleHTMLString():
     return middleHTMLString
 
 def getStartingHTMLString():
-    startingHTMLString = "<!DOCTYPE html><html lang='en' ><head><meta charset='UTF-8'><title>WHAT-TO-FIX</title><link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css'><link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Titillium+Web:300,700,300italic'><link rel='stylesheet' href='./style.css'><script src='https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js'></script></head><body><h1>What-To-Fix</h1>"
+    startingHTMLString = "<!DOCTYPE html><html lang='en' ><head><meta charset='UTF-8'><title>WHAT-TO-FIX</title><link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css'><link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Titillium+Web:300,700,300italic'><link rel='stylesheet' href='./style.css'><script src='https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js'></script></head><body><h1>WHAT-TO-FIX</h1>"
     return startingHTMLString
 
 def createHTMLFile():
