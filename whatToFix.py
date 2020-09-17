@@ -7,7 +7,7 @@ import os
 import pandas as pd
 import collections
 
-testNames = ['HelpshiftDemoiOSUIConvTests','HelpshiftDemoiOSUIFormTests']
+testNames = []
 
 def getEndingHTMLString():
     endingHTMLString = "</body></html>"
