@@ -5,7 +5,7 @@ A utility written in python for triaging UI automation test logs for iOS in a be
 ## Why do we need it?
 
 * In Xcode when we go to **Report Navigator** we get the history of your build, run, debug, continuous integration, and source control tasks etc 
-[report navigator](https://github.com/udighe7/whatToFix/blob/feature/images/reportNavigator.png)
+![report navigator](https://github.com/udighe7/whatToFix/blob/feature/images/reportNavigator.png)
 
 * But, the thing here is that if you have a large number of UI or Unit test running under a particular scheme -
     * Now, let's say you added a new feature into your app.
@@ -32,7 +32,7 @@ A utility written in python for triaging UI automation test logs for iOS in a be
         * It would also tell number of test failing due to the particular reason.
         * % of success rate affected by this failure.
         * And list of of the test cases that are failing.
-        [whatToFix.html](https://github.com/udighe7/whatToFix/blob/feature/images/whatToFix.png)
+        ![whatToFix](https://github.com/udighe7/whatToFix/blob/feature/images/whatToFix.png)
         
 ## How to get started?
 
