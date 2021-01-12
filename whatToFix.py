@@ -6,8 +6,10 @@ import csv
 import os
 import pandas as pd
 import collections
+import sys
 
 testNames = []
+isXcode10 = True
 
 def getEndingHTMLString():
     endingHTMLString = "</body></html>"
@@ -132,7 +134,17 @@ def getListOfLogFiles():
     listOfLogFiles = [line for line in subprocess.check_output(cmd, shell=True).splitlines()]
     return listOfLogFiles
 
+def isXcode10Used(xcodeVersion):
+    versionAndSubversion = xcodeVersion.split(".")
+    if not versionAndSubversion[0] == "10":
+        global isXcode10
+        isXcode10 = False
+
 def main():
+    if len(sys.argv) == 1:
+        print("Xcode version required!")
+        exit(0)
+    isXcode10Used(sys.argv[1])
     listOfLogFiles = getListOfLogFiles()
     if(len(listOfLogFiles) == 0):
         print("\nERROR: No log file found !\n")
