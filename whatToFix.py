@@ -114,7 +114,27 @@ def createCSVData(validatedLogFilesDict):
             testCaseDict = generateDictsForFile(logFile,testCaseDict)
         generateCSV(testCaseDict,testName)
 
-def validateLogFiles(listOfLogFiles):
+def validatedLogFilesForXcode11AndAbove(listOfLogFiles):
+    validatedLogFilesDict = {}
+    numForValidLogFiles = 0
+    for file in listOfLogFiles:
+        for testName in testNames:
+            stringShouldBeInLogFile = "Test target "+testName
+            fileHandle = open(file,"r")
+            testNameFound = False
+            for line in fileHandle:
+                if stringShouldBeInLogFile in line:
+                    if not testName in validatedLogFilesDict.keys():
+                        validatedLogFilesDict[testName] = []
+                    validatedLogFilesDict[testName].append(file)
+                    testNameFound = True
+                    numForValidLogFiles += 1
+                    break
+            if testNameFound:
+                break
+    return (validatedLogFilesDict, numForValidLogFiles)
+
+def validatedLogFilesForXcode10(listOfLogFiles):
     validatedLogFilesDict = {}
     numForValidLogFiles = 0
     for logFile in listOfLogFiles:
@@ -126,6 +146,12 @@ def validateLogFiles(listOfLogFiles):
                 numForValidLogFiles += 1
                 break
     return (validatedLogFilesDict,numForValidLogFiles)
+
+def validateLogFiles(listOfLogFiles):
+    if isXcode10:
+        return validatedLogFilesForXcode10(listOfLogFiles)
+    else:
+        return validatedLogFilesForXcode11AndAbove(listOfLogFiles)
 
 def getPathForLogFiles():
     path = ""
