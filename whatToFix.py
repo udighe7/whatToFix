@@ -127,9 +127,19 @@ def validateLogFiles(listOfLogFiles):
                 break
     return (validatedLogFilesDict,numForValidLogFiles)
 
+def getPathForLogFiles():
+    path = ""
+    while(len(path)==0):
+        path = raw_input("\nEnter the path to directory where log files are stored : ")
+    return path
+
 def getListOfLogFiles():
     searchInDirectory = '~/Library/Developer/xcode/DerivedData'
+    if not isXcode10:
+        searchInDirectory = getPathForLogFiles()
     fileName = "StandardOutputAndStandardError.txt"
+    if not isXcode10:
+        fileName = "*.txt"
     cmd = "find "+searchInDirectory+" -name "+"'"+fileName+"'"
     listOfLogFiles = [line for line in subprocess.check_output(cmd, shell=True).splitlines()]
     return listOfLogFiles
