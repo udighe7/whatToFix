@@ -42,6 +42,14 @@ A utility written in python for triaging UI automation test logs for iOS in a be
 2. Search for a global variable named as `testNames`. Add the names of test target which you want to analyze in that list.
 3. Install `pandas` module for python or create a virtual env and install the module in it.
 4. If you have create virtual env, active it.
-5. Run cmd `python whatToFix.py`.
+5. Run cmd `python whatToFix.py <yourXcodeVersion>`.  The utility support log files generated from Xcode 10 and above.  
+    * For Xcode 10:
+        You don't need to export and store log file of test runs. The utility takes care of searching for log files. 
+        So just run cmd i.e.  `python whatToFix.py 10`.  (Xcode subversion is not required here)
+    * For Xcode 11 and above:
+        You need to export and store log file from Xcode to any directory you wish to store the log file.
+        So if you are using Xcode 11 then just run cmd i.e.  `python whatToFix.py 11`.   (Xcode subversion is not required in this case as well)
+        Now it will ask you to enter the directory path for log files. So lets say you stored it in `Downloads` directory. The provide path as follows - 
+            `$ Enter the path to directory where log files are stored : ~/Downloads` and hit enter.
 6. Refer to the CSV files generated for all test targets. The CSV files would be named after test targets.
 7. Refer `whatToFix.html` for test cases grouped with common reason for failures for each target.
