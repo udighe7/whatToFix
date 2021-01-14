@@ -76,7 +76,39 @@ def generateCSV(testCaseDict,testName):
                 elif len(testCaseDict[testSuite][testCase]) == 2:
                     writer.writerow([testSuite, testCase, testCaseDict[testSuite][testCase][0], testCaseDict[testSuite][testCase][1]])
 
-def generateDictsForFile(file,testCaseDict):
+def generateDictsForFileForXcode11AndAbove(file,testCaseDict):
+    print(testCaseDict)
+    file = open(file,"r")
+    testSuite = ""
+    testCase = ""
+    executingTest = False
+    for line in file:
+        if(not executingTest):
+            startingTestCase = re.search("^Test Case '-\[(?P<test_suite>\w+) (?P<test_case>\w+)\]'.*started.",line)
+            if(startingTestCase):
+                testSuite = startingTestCase.group('test_suite')
+                testCase = startingTestCase.group('test_case')
+                executingTest = True
+                if not testSuite in testCaseDict.keys():
+                    testCaseDict[testSuite] = {testCase:[]}
+                elif not testCase in testCaseDict[testSuite].keys():
+                    testCaseDict[testSuite][testCase] = []
+        else:
+            failingtestCase = re.search(".* error:.*] : (?P<reason>.*)",line)
+            if(failingtestCase):
+                reason = failingtestCase.group("reason").rstrip()
+                if len(testCaseDict[testSuite][testCase]) == 0:
+                    testCaseDict[testSuite][testCase] = [reason,]
+            else:
+                endingTestCase = re.search("^Test Case.*]' (?P<result>\w+) .*",line)
+                if(endingTestCase):
+                    if testSuite in line and testCase in line:
+                        if (not "passed" in testCaseDict[testSuite][testCase] and not "failed" in testCaseDict[testSuite][testCase]):
+                            testCaseDict[testSuite][testCase].append(endingTestCase.group("result"))
+                        executingTest = False
+    return testCaseDict
+
+def generateDictsForFileForXcode10(file,testCaseDict):
     file = open(file,"r")
     testSuite = ""
     testCase = ""
@@ -106,6 +138,12 @@ def generateDictsForFile(file,testCaseDict):
                             testCaseDict[testSuite][testCase].append(endingTestCase.group("result"))
                         executingTest = False
     return testCaseDict
+
+def generateDictsForFile(file,testCaseDict):
+    if isXcode10:
+        return generateDictsForFileForXcode10(file,testCaseDict)
+    else:
+        return generateDictsForFileForXcode11AndAbove(file,testCaseDict)
 
 def createCSVData(validatedLogFilesDict):
     for testName in validatedLogFilesDict.keys():
